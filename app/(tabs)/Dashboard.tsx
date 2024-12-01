@@ -18,6 +18,7 @@ const Dashboard = () => {
   }
 
   return (
+
     <ScrollView
       contentContainerStyle={{
         flexGrow: 1,
@@ -27,6 +28,7 @@ const Dashboard = () => {
         width: "100%",
       }}
     >
+
       {/* Dashboard Title */}
       <Text className="text-2xl font-bold text-center mb-6">
         Driver Dashboard
