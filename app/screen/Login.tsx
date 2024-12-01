@@ -8,14 +8,16 @@ import {
   Image,
   Alert,
   ActivityIndicator,
-} from "react-native";
-import { useRouter } from "expo-router";
+  SafeAreaView,
+} from "react-native"
+import { useRouter } from "expo-router"
+import { Mail, Lock, Eye, EyeOff } from "lucide-react-native" // Import Lucide Icons
 
 const Login = () => {
-  const router = useRouter();
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [loading, setLoading] = useState(false); // Loading state
+  const router = useRouter()
+  const [form, setForm] = useState({ email: "", password: "" })
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const onSubmit = () => {
     const { email, password } = form;
@@ -25,18 +27,14 @@ const Login = () => {
       return;
     }
 
-    // Show loading state
-    setLoading(true);
+    setLoading(true)
 
-    // Simulate login delay
     setTimeout(() => {
-      console.log("Login Submitted:", form);
-
-      // Redirect to dashboard after successful login
-      router.push("/screen/Dashboard");
-      setLoading(false); // Hide loading
-    }, 2000); // Mock API call delay
-  };
+      console.log("Login Submitted:", form)
+      router.push("./(tabs)/Dashboard")
+      setLoading(false)
+    }, 2000)
+  }
 
   return (
     <ScrollView
@@ -45,12 +43,13 @@ const Login = () => {
         alignItems: "center",
         padding: 16,
       }}
+      className="pt-24"
     >
       {/* Logo Section */}
-      <View className="mb-4 items-center">
+      <View className="mb-6 items-center">
         <Image
-          source={require("../../assets/images/logo.png")}
-          className="w-[150px] h-[150px] bg-cover"
+          source={require("../../assets/images/logo.png")} // Replace with your actual logo path
+          className="w-36 h-36"
         />
       </View>
 
@@ -67,52 +66,63 @@ const Login = () => {
 
       {/* Form Section */}
       <View className="w-full">
-        <View className="mb-5">
-          <Text className="text-gray-700 font-medium mb-2">Email</Text>
-          <TextInput
-            className="bg-white p-4 rounded-full border border-gray-300"
-            placeholder="Enter your email"
-            keyboardType="email-address"
-            value={form.email}
-            onChangeText={(text) => setForm({ ...form, email: text })}
-          />
+        {/* Email Input */}
+        <View className="mb-4">
+          <Text className="text-gray-700 font-medium mb-1">Email</Text>
+          <View className="flex-row items-center bg-white px-4 py-3 rounded-full border border-gray-300">
+            <Mail size={20} color="#4A5568" />
+            <TextInput
+              className="flex-1 ml-3 text-gray-700"
+              placeholder="Enter your email"
+              keyboardType="email-address"
+              value={form.email}
+              onChangeText={text => setForm({ ...form, email: text })}
+            />
+          </View>
         </View>
 
-        <View className="mb-5 relative">
-          <Text className="text-gray-700 font-medium mb-2">Password</Text>
-          <TextInput
-            className="bg-white p-4 rounded-full border border-gray-300"
-            placeholder="Enter your password"
-            secureTextEntry={!isPasswordVisible}
-            value={form.password}
-            onChangeText={(text) => setForm({ ...form, password: text })}
-          />
-          <TouchableOpacity
-            className="absolute right-4"
-            onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-          >
-            <Text className="text-blue-500 font-medium">
-              {isPasswordVisible ? "Hide" : "Show"}
-            </Text>
-          </TouchableOpacity>
+        {/* Password Input */}
+        <View className="mb-6">
+          <Text className="text-gray-700 font-medium mb-1">Password</Text>
+          <View className="flex-row items-center bg-white px-4 py-3 rounded-full border border-gray-300">
+            <Lock size={20} color="#4A5568" />
+            <TextInput
+              className="flex-1 ml-3 text-gray-700"
+              placeholder="Enter your password"
+              secureTextEntry={!isPasswordVisible}
+              value={form.password}
+              onChangeText={text => setForm({ ...form, password: text })}
+            />
+            <TouchableOpacity
+              className="ml-3"
+              onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+            >
+              {isPasswordVisible ? (
+                <EyeOff size={20} color="#4A5568" />
+              ) : (
+                <Eye size={20} color="#4A5568" />
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
 
       {/* Buttons */}
-      <View className="w-full mt-6 space-y-4">
-        {/* Login Button */}
+      <View className="w-full">
         <TouchableOpacity
-          className="bg-green-500 py-3 px-8 rounded-full flex justify-center items-center"
+          className={`bg-green-500 py-3 rounded-full ${
+            loading ? "opacity-50" : "opacity-100"
+          }`}
           onPress={onSubmit}
-          disabled={loading} // Disable button during loading
+          disabled={loading}
         >
-          <Text className="text-white text-lg font-bold">
-            {loading ? (
-              <ActivityIndicator size="small" color="#fff" />
-            ) : (
-              "Login"
-            )}
-          </Text>
+          {loading ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text className="text-white text-lg font-bold text-center">
+              Login
+            </Text>
+          )}
         </TouchableOpacity>
       </View>
     </ScrollView>
