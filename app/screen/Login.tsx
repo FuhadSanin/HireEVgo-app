@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,35 +8,35 @@ import {
   Image,
   Alert,
   ActivityIndicator,
-} from "react-native"
-import { useRouter } from "expo-router"
+} from "react-native";
+import { useRouter } from "expo-router";
 
 const Login = () => {
-  const router = useRouter()
-  const [form, setForm] = useState({ email: "", password: "" })
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  const [loading, setLoading] = useState(false) // Loading state
+  const router = useRouter();
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading state
 
   const onSubmit = () => {
-    const { email, password } = form
+    const { email, password } = form;
 
     if (!email || !password) {
-      Alert.alert("Error", "Please fill in all fields.")
-      return
+      Alert.alert("Error", "Please fill in all fields.");
+      return;
     }
 
     // Show loading state
-    setLoading(true)
+    setLoading(true);
 
     // Simulate login delay
     setTimeout(() => {
-      console.log("Login Submitted:", form)
+      console.log("Login Submitted:", form);
 
       // Redirect to dashboard after successful login
-      router.push("/screen/Dashboard")
-      setLoading(false) // Hide loading
-    }, 2000) // Mock API call delay
-  }
+      router.push("/screen/Dashboard");
+      setLoading(false); // Hide loading
+    }, 2000); // Mock API call delay
+  };
 
   return (
     <ScrollView
@@ -57,7 +57,10 @@ const Login = () => {
       {/* Header Section */}
       <View className="mb-8 items-center">
         <Text className="text-3xl font-bold">HireEVgo</Text>
-        <Text className="text-lg text-gray-500 mt-2">
+        <Text
+          className="text-lg text-gray-500 mt-2"
+          style={{ fontFamily: "I-light" }}
+        >
           Welcome back! Please login to your account.
         </Text>
       </View>
@@ -71,7 +74,7 @@ const Login = () => {
             placeholder="Enter your email"
             keyboardType="email-address"
             value={form.email}
-            onChangeText={text => setForm({ ...form, email: text })}
+            onChangeText={(text) => setForm({ ...form, email: text })}
           />
         </View>
 
@@ -82,7 +85,7 @@ const Login = () => {
             placeholder="Enter your password"
             secureTextEntry={!isPasswordVisible}
             value={form.password}
-            onChangeText={text => setForm({ ...form, password: text })}
+            onChangeText={(text) => setForm({ ...form, password: text })}
           />
           <TouchableOpacity
             className="absolute right-4"
@@ -113,7 +116,7 @@ const Login = () => {
         </TouchableOpacity>
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
