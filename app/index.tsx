@@ -1,17 +1,12 @@
-import { Text, View } from "react-native"
-import "../global.css"
+import React from "react"
+import { SafeAreaView } from "react-native"
+import "../global.css" // Ensure global styles are properly loaded
+import { Stack } from "expo-router"
 import Login from "./screen/Login"
 export default function Index() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "white",
-      }}
-    >
+    <SafeAreaView className="flex-1 justify-center items-center bg-white">
       <Login />
-    </View>
+    </SafeAreaView>
   )
 }

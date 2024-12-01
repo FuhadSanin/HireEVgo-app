@@ -33,7 +33,7 @@ const Dashboard = () => {
       </Text>
 
       {/* Driver's Info */}
-      <View className="mb-6 p-4 bg-white rounded-lg shadow-md">
+      <View className="mb-6 p-4 bg-white rounded-lg shadow-sm">
         <Text className="text-xl font-semibold mb-2">Personal Details</Text>
         <Text className="text-gray-700 mb-1">Name: {driver.name}</Text>
         <Text className="text-gray-700 mb-1">
@@ -45,7 +45,7 @@ const Dashboard = () => {
       </View>
 
       {/* Vehicle Details */}
-      <View className="mb-6 p-4 bg-white rounded-lg shadow-md">
+      <View className="mb-6 p-4 bg-white rounded-lg shadow-sm">
         <Text className="text-xl font-semibold mb-2">Vehicle Details</Text>
         <Text className="text-gray-700 mb-1">
           Make: {driver.vehicleDetails.make}
