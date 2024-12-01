@@ -1,7 +1,6 @@
 import React from "react"
 import { SafeAreaView } from "react-native"
 import "../global.css" // Ensure global styles are properly loaded
-import { Stack } from "expo-router"
 import Login from "./screen/Login"
 
 export default function Index() {
