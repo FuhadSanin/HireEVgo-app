@@ -4,7 +4,11 @@ import React from "react"
 
 const TabLayout = () => {
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: "#22C55E",
+      }}
+    >
       <Tabs.Screen
         name="Dashboard"
         options={{
