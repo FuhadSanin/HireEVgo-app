@@ -1,77 +1,127 @@
-import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  SafeAreaView,
-} from "react-native";
-import { User, Phone, Mail, Truck } from "lucide-react-native"; // Icons for visual clarity
+import React from "react"
+import { View, Text, ScrollView, Image } from "react-native"
+import { User, Phone, Mail, Truck, BookUser, IdCard } from "lucide-react-native"
 
 const Profile = () => {
+  const user = {
+    personalDetails: [
+      {
+        label: "Full Name",
+        value: "John Doe",
+        icon: <User size={24} color="#379972" />,
+      },
+      {
+        label: "Email",
+        value: "johndoe@example.com",
+        icon: <Mail size={24} color="#379972" />,
+      },
+      {
+        label: "Personal Number",
+        value: "+1 123 456 7890",
+        icon: <Phone size={24} color="#379972" />,
+      },
+      {
+        label: "Emergency Contact",
+        value: "+1 987 654 3210",
+        icon: <BookUser size={24} color="#8B0000" />,
+      },
+    ],
+    vehicleDetails: [
+      {
+        label: "Vehicle Name",
+        value: "Mahindra Scorpio",
+        icon: <Truck size={24} color="#379972" />,
+      },
+      {
+        label: "Vehicle Number",
+        value: "ABC-1234",
+      },
+      {
+        label: "License Number",
+        value: "D123456789",
+        icon: <IdCard size={24} color="#379972" />,
+      },
+      { label: "RC Number", value: "RC987654321" },
+    ],
+    documents: [
+      {
+        label: "RC Book",
+        uri: "https://www.shutterstock.com/shutterstock/photos/645891550/display_1500/stock-vector-flat-man-driver-license-plastic-card-template-id-card-vector-illustration-645891550.jpg",
+      },
+      {
+        label: "License",
+        uri: "https://pvccardwala.com/wp-content/uploads/2022/11/WhatsApp-Image-2022-11-28-at-7.40.47-PM-3.jpeg",
+      },
+    ],
+  }
+
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          padding: 16,
-        }}
-      >
-        {/* Header Section */}
-        <View className="bg-green-500 py-8 px-4 items-center rounded-b-3xl">
-          {/* Profile Picture */}
-          <View className="bg-white h-20 w-20 rounded-full items-center justify-center">
-            <Text className="text-green-500 text-4xl font-bold">JD</Text>
+    <ScrollView
+      contentContainerStyle={{
+        flexGrow: 1,
+      }}
+      className="bg-background-primary w-full"
+    >
+      <View className="p-6 pb-12 pt-24">
+        {/* Profile Information */}
+        <View className="mb-6">
+          <Text className="text-2xl mb-4 font-bold text-gray-900">
+            Profile Information
+          </Text>
+          <View className="p-5 shadow-custom-light bg-white border border-gray-200 rounded-3xl mb-6">
+            {user.personalDetails.map((detail, index) => (
+              <View className="flex-row items-center mb-3" key={index}>
+                {detail.icon && <View className="mr-3">{detail.icon}</View>}
+                <Text className="text-gray-500 font-medium">
+                  {detail.label}:
+                </Text>
+                <Text className="text-gray-900 font-semibold ml-auto">
+                  {detail.value}
+                </Text>
+              </View>
+            ))}
           </View>
-          {/* Name and Contact Info */}
-          <Text className="text-white text-xl font-semibold mt-4">John Doe</Text>
-          <Text className="text-white mt-1">email@gmail.com</Text>
-          <Text className="text-white mt-1">+91 1234567890</Text>
         </View>
 
         {/* Vehicle Information */}
-        <View className="mt-6">
-          <Text className="text-lg font-bold mb-4">Vehicle Details</Text>
-          <View className="bg-gray-100 rounded-lg p-4 mb-4">
-            <View className="flex-row items-center mb-2">
-              <Truck size={20} color="#4A5568" />
-              <Text className="ml-2 text-gray-900 font-medium">
-                Vehicle Name: Mahindra Scorpio
+        <View className="p-5 shadow-custom-light bg-white border border-gray-200 rounded-3xl mb-6">
+          {user.vehicleDetails.map((detail, index) => (
+            <View className="flex-row items-center mb-3" key={index}>
+              {detail.icon && <View className="mr-3">{detail.icon}</View>}
+              <Text className="text-gray-500 font-medium">{detail.label}:</Text>
+              <Text className="text-gray-900 font-semibold ml-auto">
+                {detail.value}
               </Text>
             </View>
-            <Text className="text-gray-600">Vehicle Number: KL-07-AB-1234</Text>
-          </View>
+          ))}
         </View>
 
-        {/* RC Book and License */}
+        {/* Documents */}
         <View>
-          <Text className="text-lg font-bold mb-4">RC Book & License Details</Text>
-          {/* RC Book Details */}
-          <View className="bg-gray-100 rounded-lg p-4 mb-4">
-            <Text className="text-gray-900 font-medium mb-2">RC Book</Text>
-            <Image
-              source={{ uri: "https://via.placeholder.com/300x150" }} // Replace with RC Book image URL
-              className="w-full h-40 rounded-lg"
-              resizeMode="cover"
-            />
-          </View>
-          {/* License Details */}
-          <View className="bg-gray-100 rounded-lg p-4">
-            <Text className="text-gray-900 font-medium mb-2">License</Text>
-            <Image
-              source={{ uri: "https://via.placeholder.com/300x150" }} // Replace with License image URL
-              className="w-full h-40 rounded-lg"
-              resizeMode="cover"
-            />
-          </View>
+          <Text className="text-2xl mb-4 font-bold text-gray-900">
+            Documents
+          </Text>
+          {user.documents.map((doc, index) => (
+            <View
+              key={index}
+              className="p-5 shadow-custom-light bg-white border border-gray-200 rounded-3xl mb-5"
+            >
+              <Text className="text-gray-900 font-medium mb-3">
+                {doc.label}
+              </Text>
+              <Image
+                source={{
+                  uri: doc.uri,
+                }}
+                className="w-full h-40 rounded-lg"
+                resizeMode="cover"
+              />
+            </View>
+          ))}
         </View>
-      </ScrollView>
+      </View>
+    </ScrollView>
+  )
+}
 
-      
-      
-    </SafeAreaView>
-  );
-};
-
-export default Profile;
+export default Profile
