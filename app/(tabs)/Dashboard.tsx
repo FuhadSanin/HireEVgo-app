@@ -10,11 +10,11 @@ const Dashboard = () => {
       contentContainerStyle={{
         flexGrow: 1,
       }}
-      className="bg-gray-50 w-full"
+      className="bg-background-primary w-full"
     >
       <Header />
       <Notifications />
-      <Money />
+      {/* <Money /> */}
     </ScrollView>
   );
 };
