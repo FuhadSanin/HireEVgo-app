@@ -1,12 +1,17 @@
-import { Stack } from "expo-router";
-import { useFonts } from "expo-font";
+import { Stack } from "expo-router"
+import { useFonts } from "expo-font"
 
 export default function RootLayout() {
-  useFonts({
-    "Inter-Black": require("./../assets/fonts/Montserrat-Black.ttf"),
-    "I-light": require("./../assets/fonts/Montserrat-Light.ttf"),
-  });
+  const [fontsLoaded] = useFonts({
+    "Montserrat-Bold": require("../assets/fonts/CabinetGrotesk-Medium.ttf"),
+    "Montserrat-Regular": require("../assets/fonts/CabinetGrotesk-Regular.ttf"),
+    "Montserrat-Light": require("../assets/fonts/CabinetGrotesk-Light.ttf"),
+    "Montserrat-Medium": require("../assets/fonts/Raleway-Medium.ttf"),
+  })
 
+  if (!fontsLoaded) {
+    return null // or a loading spinner
+  }
   return (
     <Stack>
       <Stack.Screen
