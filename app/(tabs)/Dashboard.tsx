@@ -1,10 +1,11 @@
-import React from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { ScrollView } from "react-native"
 import Header from "../screen/Dashboard/Header"
 import Notifications from "../screen/Dashboard/Notifications"
-import Money from "../screen/Dashboard/Money"
+import { UserContext } from "../../context/UserContext"
 
 const Dashboard = () => {
+  const { user } = useContext(UserContext)
   return (
     <ScrollView
       contentContainerStyle={{
@@ -12,11 +13,11 @@ const Dashboard = () => {
       }}
       className="bg-background-primary w-full"
     >
-      <Header />
+      <Header user={user} />
       <Notifications />
       {/* <Money /> */}
     </ScrollView>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard

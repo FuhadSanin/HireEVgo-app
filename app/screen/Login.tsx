@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import {
   View,
   Text,
@@ -11,40 +11,68 @@ import {
   SafeAreaView,
 } from "react-native"
 import { useRouter } from "expo-router"
-import { Mail, Lock, Eye, EyeOff } from "lucide-react-native" // Import Lucide Icons
+import { IdCard, Book } from "lucide-react-native"
+import { collection, getDocs } from "firebase/firestore"
+import { db } from "../../config/FirebaseConfig"
+import { UserContext } from "../../context/UserContext"
 
 const Login = () => {
   const router = useRouter()
-  const [form, setForm] = useState({ email: "", password: "" })
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const { setUser } = useContext(UserContext)
+  const [form, setForm] = useState({ id: "", name: "" })
   const [loading, setLoading] = useState(false)
+  const [users, setUsers] = useState([])
+
+  const GetUsers = async () => {
+    try {
+      const snapshot = await getDocs(collection(db, "users"))
+      const usersList = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+      setUsers(usersList)
+    } catch (error) {
+      Alert.alert("Error", "Failed to fetch users.")
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    GetUsers()
+  }, [])
 
   const onSubmit = () => {
-    const { email, password } = form
+    const { id, name } = form
 
-    if (!email || !password) {
+    if (!id || !name) {
       Alert.alert("Error", "Please fill in all fields.")
       return
     }
 
     setLoading(true)
 
-    setTimeout(() => {
-      console.log("Login Submitted:", form)
-      router.push("./(tabs)/Dashboard")
-      setLoading(false)
-    }, 2000)
+    if (users.length > 0) {
+      const user = users.find(
+        user =>
+          String(user.id) === String(id) &&
+          user.name.toLowerCase() === name.toLowerCase()
+      )
+
+      if (user) {
+        setUser(user) // Set user in context
+        router.push("./(tabs)/Dashboard") // Navigate to Dashboard
+      } else {
+        Alert.alert("Error", "Invalid ID or Name.")
+      }
+    } else {
+      Alert.alert("Error", "No users found. Please check the database.")
+    }
+
+    setLoading(false)
   }
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        width: "100%",
-      }}
-    >
-      {" "}
-      {/* Full background color */}
+    <SafeAreaView style={{ flex: 1, width: "90%" }}>
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
@@ -55,7 +83,7 @@ const Login = () => {
         {/* Logo Section */}
         <View className="mb-6 items-center">
           <Image
-            source={require("../../assets/images/logo.png")} // Replace with your actual logo path
+            source={require("../../assets/images/logo.png")}
             className="w-36 h-36"
           />
         </View>
@@ -70,45 +98,33 @@ const Login = () => {
 
         {/* Form Section */}
         <View className="w-full">
-          {/* Email Input */}
+          {/* Driver ID Input */}
           <View className="mb-4">
-            <Text className="text-gray-700 font-medium mb-1">Email</Text>
+            <Text className="text-gray-700 font-medium mb-1">Driver ID</Text>
             <View className="flex-row items-center bg-white px-4 py-3 rounded-full border border-gray-300">
-              <Mail size={20} color="#4A5568" />
+              <IdCard size={20} color="#4A5568" />
               <TextInput
                 className="flex-1 ml-3 text-gray-700"
-                placeholder="Enter your email"
+                placeholder="Enter your Driver ID"
                 placeholderTextColor="#9CA3AF"
-                keyboardType="email-address"
-                value={form.email}
-                onChangeText={text => setForm({ ...form, email: text })}
+                value={form.id}
+                onChangeText={text => setForm({ ...form, id: text })}
               />
             </View>
           </View>
 
-          {/* Password Input */}
+          {/* Name Input */}
           <View className="mb-6">
-            <Text className="text-gray-700 font-medium mb-1">Password</Text>
+            <Text className="text-gray-700 font-medium mb-1">Name</Text>
             <View className="flex-row items-center bg-white px-4 py-3 rounded-full border border-gray-300">
-              <Lock size={20} color="#4A5568" />
+              <Book size={20} color="#4A5568" />
               <TextInput
                 className="flex-1 ml-3 text-gray-700"
-                placeholder="Enter your password"
+                placeholder="Enter your name"
                 placeholderTextColor="#9CA3AF"
-                secureTextEntry={!isPasswordVisible}
-                value={form.password}
-                onChangeText={text => setForm({ ...form, password: text })}
+                value={form.name}
+                onChangeText={text => setForm({ ...form, name: text })}
               />
-              <TouchableOpacity
-                className="ml-3"
-                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-              >
-                {isPasswordVisible ? (
-                  <EyeOff size={20} color="#4A5568" />
-                ) : (
-                  <Eye size={20} color="#4A5568" />
-                )}
-              </TouchableOpacity>
             </View>
           </View>
         </View>

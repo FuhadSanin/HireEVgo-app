@@ -1,8 +1,10 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { View, Text, ScrollView, Image } from "react-native"
 import { User, Phone, Mail, Truck, BookUser, IdCard } from "lucide-react-native"
 
 const Profile = () => {
+  const [loading, setLoading] = useState(true)
+
   const user = {
     personalDetails: [
       {
@@ -55,6 +57,11 @@ const Profile = () => {
     ],
   }
 
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 5000) // Simulate API call delay
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -69,31 +76,51 @@ const Profile = () => {
             Profile Information
           </Text>
           <View className="p-5 shadow-custom-light bg-white border border-gray-200 rounded-3xl mb-6">
-            {user.personalDetails.map((detail, index) => (
-              <View className="flex-row items-center mb-3" key={index}>
-                {detail.icon && <View className="mr-3">{detail.icon}</View>}
-                <Text className="text-gray-500 font-medium">
-                  {detail.label}:
-                </Text>
-                <Text className="text-gray-900 font-semibold ml-auto">
-                  {detail.value}
-                </Text>
-              </View>
-            ))}
+            {loading
+              ? Array.from({ length: 4 }).map((_, index) => (
+                  <View className="flex-row items-center mb-3" key={index}>
+                    <View className="w-6 h-6 bg-gray-200 rounded-full mr-3  animate-pulse" />
+                    <View className="flex-1 h-5 bg-gray-200 rounded animate-pulse" />
+                  </View>
+                ))
+              : user.personalDetails.map((detail, index) => (
+                  <View className="flex-row items-center mb-3" key={index}>
+                    {detail.icon && (
+                      <View className="mr-3 bg-white">{detail.icon}</View>
+                    )}
+                    <Text className="text-gray-500 font-medium">
+                      {detail.label}:
+                    </Text>
+                    <Text className="text-gray-900 font-semibold ml-auto">
+                      {detail.value}
+                    </Text>
+                  </View>
+                ))}
           </View>
         </View>
 
         {/* Vehicle Information */}
         <View className="p-5 shadow-custom-light bg-white border border-gray-200 rounded-3xl mb-6">
-          {user.vehicleDetails.map((detail, index) => (
-            <View className="flex-row items-center mb-3" key={index}>
-              {detail.icon && <View className="mr-3">{detail.icon}</View>}
-              <Text className="text-gray-500 font-medium">{detail.label}:</Text>
-              <Text className="text-gray-900 font-semibold ml-auto">
-                {detail.value}
-              </Text>
-            </View>
-          ))}
+          {loading
+            ? Array.from({ length: 4 }).map((_, index) => (
+                <View className="flex-row items-center mb-3" key={index}>
+                  <View className="w-6 h-6 bg-gray-200 rounded-full mr-3 animate-pulse" />
+                  <View className="flex-1 h-5 bg-gray-200 rounded animate-pulse" />
+                </View>
+              ))
+            : user.vehicleDetails.map((detail, index) => (
+                <View className="flex-row items-center mb-3" key={index}>
+                  {detail.icon && (
+                    <View className="mr-3 bg-white">{detail.icon}</View>
+                  )}
+                  <Text className="text-gray-500 font-medium">
+                    {detail.label}:
+                  </Text>
+                  <Text className="text-gray-900 font-semibold ml-auto">
+                    {detail.value}
+                  </Text>
+                </View>
+              ))}
         </View>
 
         {/* Documents */}
@@ -101,23 +128,32 @@ const Profile = () => {
           <Text className="text-2xl mb-4 font-bold text-gray-900">
             Documents
           </Text>
-          {user.documents.map((doc, index) => (
-            <View
-              key={index}
-              className="p-5 shadow-custom-light bg-white border border-gray-200 rounded-3xl mb-5"
-            >
-              <Text className="text-gray-900 font-medium mb-3">
-                {doc.label}
-              </Text>
-              <Image
-                source={{
-                  uri: doc.uri,
-                }}
-                className="w-full h-40 rounded-lg"
-                resizeMode="cover"
-              />
-            </View>
-          ))}
+          {loading
+            ? Array.from({ length: 2 }).map((_, index) => (
+                <View
+                  key={index}
+                  className="p-5 shadow-custom-light bg-white border border-gray-300 rounded-3xl mb-5"
+                >
+                  <View className="w-full h-40 bg-gray-200 rounded-lg animate-pulse" />
+                </View>
+              ))
+            : user.documents.map((doc, index) => (
+                <View
+                  key={index}
+                  className="p-5 shadow-custom-light bg-white border border-gray-200 rounded-3xl mb-5"
+                >
+                  <Text className="text-gray-900 font-medium mb-3">
+                    {doc.label}
+                  </Text>
+                  <Image
+                    source={{
+                      uri: doc.uri,
+                    }}
+                    className="w-full h-40 rounded-lg"
+                    resizeMode="cover"
+                  />
+                </View>
+              ))}
         </View>
       </View>
     </ScrollView>
