@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-  font-family: "Cabinet Grotesk";
+  font-family: "Cabinet Grotesk", sans-serif;
 }
 
 @font-face {
