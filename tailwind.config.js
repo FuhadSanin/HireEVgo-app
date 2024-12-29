@@ -6,8 +6,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'cabinet-grotesk': ['"Cabinet Grotesk"', 'sans-serif'],
-        'raleway': ['"Raleway"', 'sans-serif'],
+        "cabinet-grotesk": ['"Cabinet Grotesk"', "sans-serif"],
+        raleway: ['"Raleway"', "sans-serif"],
       },
       colors: {
         "primary-green": "#379972",

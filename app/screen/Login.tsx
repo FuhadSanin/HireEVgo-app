@@ -72,22 +72,21 @@ const Login = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, width: "90%" }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
           padding: 16,
         }}
-        className="pt-24 w-full"
+        className="pt-16 w-full"
       >
         {/* Logo Section */}
-        <View className="mb-6 items-center">
+        <View className="mb-4 items-center">
           <Image
             source={require("../../assets/images/logo.png")}
             className="w-36 h-36"
           />
         </View>
-
         {/* Header Section */}
         <View className="mb-8 items-center">
           <Text className="text-3xl font-bold">HireEVgo</Text>
@@ -95,7 +94,6 @@ const Login = () => {
             Welcome back! Please login to your account.
           </Text>
         </View>
-
         {/* Form Section */}
         <View className="w-full">
           {/* Driver ID Input */}
@@ -128,7 +126,6 @@ const Login = () => {
             </View>
           </View>
         </View>
-
         {/* Buttons */}
         <View className="w-full">
           <TouchableOpacity

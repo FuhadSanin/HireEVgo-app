@@ -28,14 +28,18 @@ const TabLayout = () => {
       <Tabs.Screen
         name="TripDetails"
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerStyle: { backgroundColor: "#379972" },
+          headerTintColor: "#FFFFFF",
           tabBarIcon: ({ color }) => <Calendar size={24} color={color} />,
         }}
       />
       <Tabs.Screen
         name="Profile"
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerStyle: { backgroundColor: "#379972" },
+          headerTintColor: "#FFFFFF",
           tabBarIcon: ({ color }) => <User size={24} color={color} />,
         }}
       />

@@ -3,6 +3,7 @@ import { ScrollView } from "react-native"
 import Header from "../screen/Dashboard/Header"
 import Notifications from "../screen/Dashboard/Notifications"
 import { UserContext } from "../../context/UserContext"
+import Previous from "../screen/Dashboard/Previous"
 
 const Dashboard = () => {
   const { user } = useContext(UserContext)
@@ -15,6 +16,7 @@ const Dashboard = () => {
     >
       <Header user={user} />
       <Notifications />
+      <Previous />
       {/* <Money /> */}
     </ScrollView>
   )

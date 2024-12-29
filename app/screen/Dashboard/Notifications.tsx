@@ -121,7 +121,7 @@ const Notifications = () => {
                   <View className="flex-row items-center mb-2">
                     <Truck size={20} color="#379972" />
                     <Text className="text-gray-500 ml-2">
-                      {trip.time || "N/A"} ({trip.date || "N/A"})
+                      {trip.time || "N/A"} . (Thursday)
                     </Text>
                   </View>
                   <View className="flex-row items-center gap-2">
@@ -133,23 +133,30 @@ const Notifications = () => {
                       {trip.ending || "Unknown"}
                     </Text>
                   </View>
-                  <View className="flex-row items-center bg-blue-200 rounded-xl flex justify-center p-1.5 mt-2">
-                    <Text className="text-black text-sm font-bold text-center">
-                      {trip.distance || 0} KM
-                    </Text>
+                  <View className="flex-row gap-2 mt-2">
+                    <View className="flex-row items-center bg-orange-400 rounded-xl flex justify-center p-1.5">
+                      <Text className="text-white text-sm font-bold text-center">
+                        Tommorow
+                      </Text>
+                    </View>
+                    <View className="flex-row justify-center items-center rounded-xl p-1.5">
+                      <Text className="text-gray-500 ">
+                        {trip.date || "N/A"}
+                      </Text>
+                    </View>
                   </View>
                 </View>
 
                 {/* Cost and Distance */}
                 <View>
-                  <View className="flex-row items-center bg-red-300 rounded-xl flex justify-center p-1.5 mb-2">
-                    <Text className="text-white text-sm font-bold text-center">
-                      Tomorrow
-                    </Text>
-                  </View>
-                  <View className="items-center">
+                  <View className="items-center ">
                     <Text className="text-custom-blue text-xl font-bold">
                       ₹{trip.cost || 0}
+                    </Text>
+                  </View>
+                  <View className="flex-row border border-gray-300  items-center rounded-xl flex justify-center p-1.5 mt-2">
+                    <Text className="text-sm font-bold text-center">
+                      {trip.distance || 0} KM
                     </Text>
                   </View>
                 </View>

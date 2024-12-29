@@ -20,7 +20,9 @@ const Header = ({ user }) => {
           <Text className="text-gray-200 text-lg font-medium">
             {user?.email}
           </Text>
-          <Text className="text-gray-200 text-lg font-medium">{user?.phone}</Text>
+          <Text className="text-gray-200 text-lg font-medium">
+            {user?.phone}
+          </Text>
         </View>
       </View>
     </View>
