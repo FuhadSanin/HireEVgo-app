@@ -1,51 +1,94 @@
-import React from "react"
-import { View, Text } from "react-native"
+import React, { useState, useEffect, useContext } from "react";
+import { View, Text, Alert } from "react-native";
 import {
-  CalendarDays,
-  MapPin,
-  DollarSign,
   MoveRight,
   Truck,
-} from "lucide-react-native"
-import { format, isToday, isTomorrow } from "date-fns"
-
-const upcomingTrips = [
-  {
-    id: 1,
-    date: "2022-10-10",
-    time: "10:00 AM",
-    starting: "Technopark",
-    ending: "Kazhakoot",
-    distance: "7.1",
-    cost: "35.00",
-  },
-  {
-    id: 2,
-    date: "2022-10-11",
-    time: "11:00 AM",
-    starting: "Tirur",
-    ending: "Technopark",
-    distance: "5.2",
-    cost: "25.00",
-  },
-  {
-    id: 3,
-    date: "2022-10-12",
-    time: "12:00 PM",
-    from: "Cochin",
-    to: "Kazhakoot",
-    distance: "10.0",
-    cost: "50.00",
-  },
-]
+} from "lucide-react-native";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../../config/FirebaseConfig";
+import { UserContext } from "../../../context/UserContext";
+import { format, isToday, isTomorrow } from "date-fns";
 
 const Upcoming = () => {
+  const { user } = useContext(UserContext);
+  const [loading, setLoading] = useState(true); // Loading state
+  const [trips, setTrips] = useState([]);
+
+  const GetTrips = async () => {
+    try {
+      setLoading(true); // Ensure loading is true before data fetch
+      const response = await getDocs(collection(db, "trips"));
+      const tripsList = response.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      // Ensure user.id exists and is valid
+      if (!user?.id) throw new Error("Invalid user data");
+
+      const filteredTrips = tripsList.filter(
+        (trip) => trip.user === String(user.id)
+      );
+      // Handle case where no trips are found
+      if (filteredTrips.length === 0) {
+        setTrips([]);
+        Alert.alert("Info", "No trips found for the current user.");
+      } else {
+        const actualTrips = filteredTrips[0]?.trips || [];
+        setTrips(actualTrips);
+        // console.log(actualTrips)
+      }
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      Alert.alert("Error", "Failed to fetch trips. Please try again.");
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    GetTrips();
+  }, []);
+
+  //To get day from date
+  const getDayFromDate = (dateString) =>
+    dateString
+      ? [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ][new Date(dateString).getDay()] || "Invalid Date"
+      : "N/A";
+
+  //To get Relative day from date
+  const getRelativeDay = (dateString) => {
+    if (!dateString) return "N/A";
+
+    const inputDate = new Date(dateString);
+    const today = new Date();
+
+    // Normalize all dates to midnight
+    today.setHours(0, 0, 0, 0);
+    inputDate.setHours(0, 0, 0, 0);
+
+    const diff = (inputDate - today) / (1000 * 60 * 60 * 24); // Difference in days
+
+    if (diff === 0) return "Today";
+    if (diff === 1) return "Tomorrow";
+    return "null";
+  };
+
   // Classify trips into categories
-  const todayTrips = upcomingTrips.filter(trip => isToday(trip.date))
-  const tomorrowTrips = upcomingTrips.filter(trip => isTomorrow(trip.date))
-  const otherTrips = upcomingTrips.filter(
-    trip => !isToday(trip.date) && !isTomorrow(trip.date)
-  )
+  const todayTrips = trips.filter((trip) => isToday(trip.date));
+  const tomorrowTrips = trips.filter((trip) => isTomorrow(trip.date));
+  const otherTrips = trips.filter(
+    (trip) => !isToday(trip.date) && !isTomorrow(trip.date)
+  );
 
   // Render a single trip
   const renderTrip = (trip: Trip) => (
@@ -58,7 +101,7 @@ const Upcoming = () => {
         <View className="flex-row items-center mb-2">
           <Truck size={20} color="#379972" />
           <Text className="text-gray-500 ml-2">
-            {trip.time || "N/A"} ({trip.date || "N/A"})
+            {trip.time || "N/A"} . ({getDayFromDate(trip.date) || "N/A"})
           </Text>
         </View>
         <View className="flex-row items-center gap-2">
@@ -70,6 +113,27 @@ const Upcoming = () => {
             {trip.ending || "Unknown"}
           </Text>
         </View>
+        <View className="flex-row gap-2 mt-2">
+          {getRelativeDay(trip.date) === "Today" && (
+            <View className="flex-row items-center bg-orange-400 rounded-xl flex justify-center p-1.5">
+              <Text className="text-white text-sm font-bold text-center">
+                {getRelativeDay(trip.date)}
+              </Text>
+            </View>
+          )}
+
+          {getRelativeDay(trip.date) === "Tomorrow" && (
+            <View className="flex-row items-center bg-blue-400 rounded-xl flex justify-center p-1.5">
+              <Text className="text-white text-sm font-bold text-center">
+                {getRelativeDay(trip.date)}
+              </Text>
+            </View>
+          )}
+
+          <View className="flex-row justify-center items-center rounded-xl p-1.5">
+            <Text className="text-gray-500">{trip.date || "N/A"}</Text>
+          </View>
+        </View>
       </View>
 
       {/* Cost and Distance */}
@@ -79,14 +143,14 @@ const Upcoming = () => {
             ₹{trip.cost || 0}
           </Text>
         </View>
-        <View className="flex-row items-center bg-blue-200 rounded-xl flex justify-center p-1.5 mt-2">
-          <Text className="text-black text-sm font-medium text-center">
+        <View className="flex-row border border-gray-300  items-center rounded-xl flex justify-center p-1.5 mt-2">
+          <Text className="text-sm font-bold text-center">
             {trip.distance || 0} KM
           </Text>
         </View>
       </View>
     </View>
-  )
+  );
 
   return (
     <View
@@ -129,7 +193,7 @@ const Upcoming = () => {
           </Text>
         )}
     </View>
-  )
-}
+  );
+};
 
-export default Upcoming
+export default Upcoming;
