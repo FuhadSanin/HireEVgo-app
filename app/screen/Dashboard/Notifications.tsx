@@ -1,58 +1,9 @@
-import React, { useEffect, useContext, useState } from "react"
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  Alert,
-} from "react-native"
+import React, { useState } from "react"
+import { View, Text, TouchableOpacity } from "react-native"
 import { Truck, MoveRight } from "lucide-react-native"
-import { collection, getDocs } from "firebase/firestore"
-import { db } from "../../../config/FirebaseConfig"
-import { UserContext } from "../../../context/UserContext"
 
-const Notifications = () => {
-  const { user } = useContext(UserContext)
+const Notifications = ({ loading, trips }) => {
   const [showAll, setShowAll] = useState(false) // State to toggle show all notifications
-  const [loading, setLoading] = useState(true) // Loading state
-  const [trips, setTrips] = useState([])
-
-  const GetTrips = async () => {
-    try {
-      setLoading(true) // Ensure loading is true before data fetch
-      const response = await getDocs(collection(db, "trips"))
-      const tripsList = response.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }))
-
-      // Ensure user.id exists and is valid
-      if (!user?.id) throw new Error("Invalid user data")
-
-      const filteredTrips = tripsList.filter(
-        trip => trip.user === String(user.id)
-      )
-
-      // Handle case where no trips are found
-      if (filteredTrips.length === 0) {
-        setTrips([])
-        Alert.alert("Info", "No trips found for the current user.")
-      } else {
-        const actualTrips = filteredTrips[0]?.trips || []
-        setTrips(actualTrips)
-      }
-
-      setLoading(false)
-    } catch (error) {
-      setLoading(false)
-      Alert.alert("Error", "Failed to fetch trips. Please try again.")
-      console.error(error)
-    }
-  }
-
-  useEffect(() => {
-    GetTrips()
-  }, [])
 
   // Function to toggle the visibility of notifications
   const toggleShowAll = () => {

@@ -9,6 +9,7 @@ import {
   Alert,
   ActivityIndicator,
   SafeAreaView,
+  Linking,
 } from "react-native"
 import { useRouter } from "expo-router"
 import { IdCard, Book } from "lucide-react-native"
@@ -17,6 +18,20 @@ import { db } from "../../config/FirebaseConfig"
 import { UserContext } from "../../context/UserContext"
 
 const Login = () => {
+  const phoneNumber = "tel:18001234567"
+
+  const handlePress = async () => {
+    try {
+      const supported = await Linking.canOpenURL(phoneNumber)
+      if (supported) {
+        await Linking.openURL(phoneNumber) // Opens the dialer
+      } else {
+        Alert.alert("Error", "Your device doesn't support this feature.")
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed to open dialer.")
+    }
+  }
   const router = useRouter()
   const { setUser } = useContext(UserContext)
   const [form, setForm] = useState({ id: "", name: "" })
@@ -76,9 +91,8 @@ const Login = () => {
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
-          padding: 16,
         }}
-        className="pt-16 w-full"
+        className="pt-24 w-full"
       >
         {/* Logo Section */}
         <View className="mb-4 items-center">
@@ -143,6 +157,19 @@ const Login = () => {
               </Text>
             )}
           </TouchableOpacity>
+        </View>
+        <View className="absolute bottom-0  -translate-x-1/2 items-center border-t border-gray-300 w-full py-4">
+          <View className="flex-row items-center justify-center">
+            <Text className="text-gray-500 mr-2">Need help? Call</Text>
+            <TouchableOpacity onPress={handlePress}>
+              <Text className="text-primary-green font-semibold underline">
+                1800-123-4567
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <Text className="text-gray-500 mt-1">
+            &copy; 2024 HireEVgo. All rights reserved.
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>

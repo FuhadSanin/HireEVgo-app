@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.fuahdsanin123.hirevgoapp"
     },
     "web": {
       "bundler": "metro",
@@ -32,16 +33,18 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ],
-      [
-        "expo-font",
-        {
-          "fonts": ["./assets/fonts/Montserrat-Black.ttf"]
-        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "d1138908-8d4b-4aa7-b87e-8b8db89d4f34"
+      }
     }
   }
 }

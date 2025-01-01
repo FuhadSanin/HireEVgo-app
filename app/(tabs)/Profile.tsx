@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useContext } from "react"
-import { View, Text, ScrollView, Image } from "react-native"
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Linking,
+  Alert,
+  TouchableOpacity,
+} from "react-native"
 import { UserContext } from "../../context/UserContext"
 import { User, Phone, Mail, Truck, BookUser, IdCard } from "lucide-react-native"
 
@@ -41,6 +49,21 @@ const Profile = () => {
     label: key,
     uri: uri,
   }))
+
+  const phoneNumber = "tel:18001234567"
+
+  const handlePress = async () => {
+    try {
+      const supported = await Linking.canOpenURL(phoneNumber)
+      if (supported) {
+        await Linking.openURL(phoneNumber) // Opens the dialer
+      } else {
+        Alert.alert("Error", "Your device doesn't support this feature.")
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed to open dialer.")
+    }
+  }
 
   return (
     <ScrollView
@@ -133,6 +156,19 @@ const Profile = () => {
                   />
                 </View>
               ))}
+        </View>
+        <View className="items-center border-t border-gray-300 w-full py-4">
+          <View className="flex-row items-center justify-center">
+            <Text className="text-gray-500 mr-2">Need help? Call</Text>
+            <TouchableOpacity onPress={handlePress}>
+              <Text className="text-primary-green font-semibold underline">
+                1800-123-4567
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <Text className="text-gray-500 mt-1">
+            &copy; 2024 HireEVgo. All rights reserved.
+          </Text>
         </View>
       </View>
     </ScrollView>

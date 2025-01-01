@@ -5,10 +5,6 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
-      fontFamily: {
-        "cabinet-grotesk": ['"Cabinet Grotesk"', "sans-serif"],
-        raleway: ['"Raleway"', "sans-serif"],
-      },
       colors: {
         "primary-green": "#379972",
         "custom-blue": "#0E627C",
