@@ -1,6 +1,6 @@
 import React from "react"
 import { ScrollView, SafeAreaView } from "react-native"
-import Upcoming from "../screen/TripDetails/Upcoming"
+import Upcoming from "../screen/UpcomingTrips/Upcoming"
 
 const TripDetails = () => {
   return (

@@ -12,28 +12,31 @@ import { UserContext } from "../../context/UserContext"
 import { User, Phone, Mail, Truck, BookUser, IdCard } from "lucide-react-native"
 
 const Profile = () => {
-  const [loading, setLoading] = useState(false)
-  const { user } = useContext(UserContext)
+  const [loading, setLoading] = useState(true);
+  const { user } = useContext(UserContext);
 
   // Icon mapping for labels
   const iconMapping = {
     name: <User size={20} className="mr-3" color="#379972" />,
     email: <Mail size={20} className="mr-3" color="#379972" />,
     "personal number": <Phone size={20} className="mr-3" color="#379972" />,
-    "emergency contact": (
-      <BookUser size={20} className="mr-3" color="#8B0000" />
-    ),
+    "emergency contact": <BookUser size={20} className="mr-3"  color="#8B0000" />,
     "license number": <IdCard size={20} className="mr-3" color="#379972" />,
     "vehicle name": <Truck size={20} className="mr-3" color="#379972" />,
-  }
+  };
 
   // Function to transform the object keys and values into arrays
-  const transformData = data => {
+  const transformData = (data) => {
     return Object.entries(data).map(([key, value]) => ({
       label: key,
       value: value,
-    }))
-  }
+    }));
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000); // Simulate API call delay
+    return () => clearTimeout(timer);
+  }, []);
 
   // Extract the transformed personal and vehicle details
   const personalDetails = transformData({
@@ -41,14 +44,14 @@ const Profile = () => {
     email: user.email,
     "personal number": user["personal number"],
     "emergency contact": user["emergency contact"],
-  })
+  });
 
-  const vehicleDetails = transformData(user["vehicle details"])
+  const vehicleDetails = transformData(user["vehicle details"]);
 
   const documentDetails = Object.entries(user.documents).map(([key, uri]) => ({
     label: key,
     uri: uri,
-  }))
+  }));
 
   const phoneNumber = "tel:18001234567"
 
@@ -72,9 +75,9 @@ const Profile = () => {
       }}
       className="bg-background-primary w-full"
     >
-      <View className="p-6 pb-12 pt-10">
+      <View className="p-6 pb-6 pt-12">
         {/* Profile Information */}
-        <View className="mb-4">
+        <View className="mb-6">
           <Text className="text-2xl mb-4 font-bold text-gray-900">
             Profile Information
           </Text>
@@ -89,7 +92,7 @@ const Profile = () => {
               : personalDetails.map((detail, index) => (
                   <View className="flex-row items-center mb-3" key={index}>
                     {iconMapping[detail.label.toLowerCase()] || null}
-                    <Text className="ml-2 text-gray-500 capitalize font-medium">
+                    <Text className="text-gray-500 ml-2 capitalize font-medium">
                       {detail.label}:
                     </Text>
                     <Text className="text-gray-900 font-semibold ml-auto">
@@ -115,7 +118,7 @@ const Profile = () => {
             : vehicleDetails.map((detail, index) => (
                 <View className="flex-row items-center mb-3" key={index}>
                   {iconMapping[detail.label.toLowerCase()] || null}
-                  <Text className="ml-2 text-gray-500 capitalize font-medium">
+                  <Text className="text-gray-500 ml-2 capitalize font-medium">
                     {detail.label}:
                   </Text>
                   <Text className="text-gray-900 capitalize font-semibold ml-auto">
@@ -126,7 +129,7 @@ const Profile = () => {
         </View>
 
         {/* Documents */}
-        <View className="mb-4">
+        <View>
           <Text className="text-2xl mb-4 font-bold text-gray-900">
             Documents
           </Text>
@@ -172,7 +175,7 @@ const Profile = () => {
         </View>
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

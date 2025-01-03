@@ -92,7 +92,7 @@ const Login = () => {
         contentContainerStyle={{
           flexGrow: 1,
         }}
-        className="pt-24 w-full"
+        className="pt-24 w-full p-8"
       >
         {/* Logo Section */}
         <View className="mb-4 items-center">
@@ -158,7 +158,7 @@ const Login = () => {
             )}
           </TouchableOpacity>
         </View>
-        <View className="absolute bottom-0  -translate-x-1/2 items-center border-t border-gray-300 w-full py-4">
+        <View className="mt-10 items-center w-full py-4">
           <View className="flex-row items-center justify-center">
             <Text className="text-gray-500 mr-2">Need help? Call</Text>
             <TouchableOpacity onPress={handlePress}>
