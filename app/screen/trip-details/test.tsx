@@ -1,6 +1,13 @@
-import { IndianRupee, MoveRight, Route, Truck } from "lucide-react-native"
+import {
+  IndianRupee,
+  MoveRight,
+  PhoneCall,
+  Route,
+  Truck,
+} from "lucide-react-native"
 import React from "react"
 import { View, Text, ScrollView, TouchableOpacity } from "react-native"
+import { Alert, Linking } from "react-native"
 
 const test = () => {
   const trip = {
@@ -16,7 +23,6 @@ const test = () => {
       email: "e@gmail.com",
       starting_address: "123, Pune",
       ending_address: "456, Mumbai",
-      secondary_phone: "0987654321",
     },
   }
 
@@ -25,8 +31,23 @@ const test = () => {
     ([key, value]) => ({ label: key.replace(/_/g, " "), value })
   )
 
+  const phoneNumber = "tel:18001234567"
+
+  const handlePress = async () => {
+    try {
+      const supported = await Linking.canOpenURL(phoneNumber)
+      if (supported) {
+        await Linking.openURL(phoneNumber) // Opens the dialer
+      } else {
+        Alert.alert("Error", "Your device doesn't support this feature.")
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed to open dialer.")
+    }
+  }
+
   return (
-    <ScrollView className="bg-background-primary flex-1 p-8">
+    <ScrollView className="bg-background-primary flex-1 p-6">
       {/* Header Section */}
       <View className="flex-row items-center justify-between mt-3 mb-3">
         <View className="flex-row items-center">
@@ -96,8 +117,21 @@ const test = () => {
         ))}
       </View>
 
+      <TouchableOpacity
+        className="flex-row bg-white p-5 justify-evenly items-center rounded-3xl shadow-custom-light mt-6"
+        onPress={handlePress}
+      >
+        <View className="bg-gray-100 rounded-full p-3 ">
+          <PhoneCall size={24} color="green" />
+        </View>
+        <View>
+          <Text className="text-xl text-gray-500 ">Client name</Text>
+          <Text className="text-xl font-bold ">+91 7012190904</Text>
+        </View>
+      </TouchableOpacity>
+
       <TouchableOpacity className="bg-primary-green  rounded-3xl p-4 mt-6">
-        <Text className="text-white text-center font-bold">Completed</Text>
+        <Text className="text-white text-center font-bold">Complete</Text>
       </TouchableOpacity>
     </ScrollView>
   )

@@ -16,6 +16,7 @@ import { IdCard, Book } from "lucide-react-native"
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "../../config/FirebaseConfig"
 import { UserContext } from "../../context/UserContext"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 const Login = () => {
   const phoneNumber = "tel:18001234567"
@@ -56,7 +57,7 @@ const Login = () => {
     GetUsers()
   }, [])
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const { id, name } = form
 
     if (!id || !name) {
@@ -75,7 +76,8 @@ const Login = () => {
 
       if (user) {
         setUser(user) // Set user in context
-        router.push("./(tabs)/Dashboard") // Navigate to Dashboard
+        await AsyncStorage.setItem("user", JSON.stringify(user)) // Save user in storage
+        router.push("/(tabs)/Dashboard") // Navigate to Dashboard
       } else {
         Alert.alert("Error", "Invalid ID or Name.")
       }
@@ -86,8 +88,29 @@ const Login = () => {
     setLoading(false)
   }
 
+  const loadUserFromStorage = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("user") // Get user data
+      if (jsonValue != null) {
+        const storedUser = JSON.parse(jsonValue) // Parse the JSON string back into an object
+        setUser(storedUser) // Set user in context
+      }
+    } catch (error) {
+      console.error("Error retrieving user from AsyncStorage", error)
+    }
+  }
+  useEffect(() => {
+    loadUserFromStorage()
+  }, [])
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+      <View className=" bg-cover h-36 w-full absolute top-0 left-0">
+        <Image
+          source={require("../../assets/images/wave.png")}
+          className="w-full h-full"
+        />
+      </View>
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
@@ -95,6 +118,7 @@ const Login = () => {
         className="pt-24 w-full p-8"
       >
         {/* Logo Section */}
+
         <View className="mb-4 items-center">
           <Image
             source={require("../../assets/images/logo.png")}

@@ -1,18 +1,36 @@
-import React from "react"
-import { SafeAreaView, Image, View } from "react-native"
-import "../global.css" // Ensure global styles are properly loaded
-import Login from "./screen/Login"
+import React, { useContext, useEffect, useState } from "react"
+import { View, Image, ActivityIndicator } from "react-native"
+import { UserContext } from "../context/UserContext"
+import { useRouter } from "expo-router"
+import "../global.css"
 
-export default function Index() {
+const Index = () => {
+  const { user } = useContext(UserContext)
+  const router = useRouter()
+  const [isReady, setIsReady] = useState(false)
+
+  // Ensure navigation is delayed until layout is ready
+  useEffect(() => {
+    const timer = setTimeout(() => setIsReady(true), 100) // Simulate a short delay
+    return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    if (isReady) {
+      if (user) {
+        router.replace("(tabs)/Dashboard") // Navigate to the Dashboard if the user is logged in
+      } else {
+        router.replace("/screen/Login") // Navigate to the Login screen if the user is not logged in
+      }
+    }
+  }, [user, isReady])
+
+  // Show a loading spinner while determining navigation
   return (
-    <SafeAreaView className="flex-1  items-center bg-white">
-      <View className="bg-cover absolute bg-center w-full h-56 rounded-lg -mt-4">
-        <Image
-          source={require("../assets/images/wave.png")}
-          className="w-full h-full"
-        />
-      </View>
-      <Login />
-    </SafeAreaView>
+    <View className="flex-1 items-center justify-center bg-white">
+      {!isReady && <ActivityIndicator size="large" color="#379972" />}
+    </View>
   )
 }
+
+export default Index

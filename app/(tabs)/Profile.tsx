@@ -10,33 +10,38 @@ import {
 } from "react-native"
 import { UserContext } from "../../context/UserContext"
 import { User, Phone, Mail, Truck, BookUser, IdCard } from "lucide-react-native"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { useRouter } from "expo-router"
 
 const Profile = () => {
-  const [loading, setLoading] = useState(true);
-  const { user } = useContext(UserContext);
+  const [loading, setLoading] = useState(true)
+  const { user } = useContext(UserContext)
+  const router = useRouter()
 
   // Icon mapping for labels
   const iconMapping = {
     name: <User size={20} className="mr-3" color="#379972" />,
     email: <Mail size={20} className="mr-3" color="#379972" />,
     "personal number": <Phone size={20} className="mr-3" color="#379972" />,
-    "emergency contact": <BookUser size={20} className="mr-3"  color="#8B0000" />,
+    "emergency contact": (
+      <BookUser size={20} className="mr-3" color="#8B0000" />
+    ),
     "license number": <IdCard size={20} className="mr-3" color="#379972" />,
     "vehicle name": <Truck size={20} className="mr-3" color="#379972" />,
-  };
+  }
 
   // Function to transform the object keys and values into arrays
-  const transformData = (data) => {
+  const transformData = data => {
     return Object.entries(data).map(([key, value]) => ({
       label: key,
       value: value,
-    }));
-  };
+    }))
+  }
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2000); // Simulate API call delay
-    return () => clearTimeout(timer);
-  }, []);
+    const timer = setTimeout(() => setLoading(false), 100) // Simulate API call delay
+    return () => clearTimeout(timer)
+  }, [])
 
   // Extract the transformed personal and vehicle details
   const personalDetails = transformData({
@@ -44,14 +49,14 @@ const Profile = () => {
     email: user.email,
     "personal number": user["personal number"],
     "emergency contact": user["emergency contact"],
-  });
+  })
 
-  const vehicleDetails = transformData(user["vehicle details"]);
+  const vehicleDetails = transformData(user["vehicle details"])
 
   const documentDetails = Object.entries(user.documents).map(([key, uri]) => ({
     label: key,
     uri: uri,
-  }));
+  }))
 
   const phoneNumber = "tel:18001234567"
 
@@ -65,6 +70,15 @@ const Profile = () => {
       }
     } catch (error) {
       Alert.alert("Error", "Failed to open dialer.")
+    }
+  }
+
+  const logoutHandler = async () => {
+    try {
+      await AsyncStorage.removeItem("user")
+      router.push("/screen/Login") // Redirect to login page after logout
+    } catch (error) {
+      Alert.alert("Error", "Failed to logout. Please try again.")
     }
   }
 
@@ -160,7 +174,15 @@ const Profile = () => {
                 </View>
               ))}
         </View>
-        <View className="items-center border-t border-gray-300 w-full py-4">
+        <View className="mt-6 mb-6">
+          <TouchableOpacity
+            onPress={logoutHandler}
+            className="w-full bg-primary-green py-3 rounded-full items-center justify-center"
+          >
+            <Text className="text-white font-semibold">Logout</Text>
+          </TouchableOpacity>
+        </View>
+        <View className="items-center w-full py-4">
           <View className="flex-row items-center justify-center">
             <Text className="text-gray-500 mr-2">Need help? Call</Text>
             <TouchableOpacity onPress={handlePress}>
@@ -175,7 +197,7 @@ const Profile = () => {
         </View>
       </View>
     </ScrollView>
-  );
-};
+  )
+}
 
-export default Profile;
+export default Profile

@@ -7,8 +7,6 @@ import {
   Alert,
 } from "react-native"
 import { Truck, MoveRight, Check } from "lucide-react-native"
-import { collection, getDocs } from "firebase/firestore"
-import { db } from "../../../config/FirebaseConfig"
 import { UserContext } from "../../../context/UserContext"
 import { router } from "expo-router"
 
@@ -112,7 +110,7 @@ const Notifications = ({ loading, trips }) => {
       <View className="p-6 pt-0 gap-5">
         {loading ? (
           // Show skeleton loading when data is being fetched
-          Array.from({ length: 3 }).map((_, index) => (
+          Array.from({ length: 2 }).map((_, index) => (
             <View
               key={index}
               className="p-5 flex-row justify-between shadow-custom-light bg-gray-200 rounded-3xl animate-pulse"

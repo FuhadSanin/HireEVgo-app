@@ -18,6 +18,12 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen
+          name="screen/Login"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
           name="screen/trip-details/test"
           options={{
             title: "Trip Details", // Custom header title

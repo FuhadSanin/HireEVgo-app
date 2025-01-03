@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from "react";
-import { View, Text, StyleSheet, Alert } from "react-native";
+import React, { useContext, useState, useEffect } from "react"
+import { View, Text, StyleSheet, Alert, FlatList } from "react-native"
 import {
   Truck,
   ChevronsLeftRightEllipsis,
@@ -7,63 +7,62 @@ import {
   IndianRupee,
   Fuel,
   Star,
-} from "lucide-react-native";
-import CircularProgress from "react-native-circular-progress-indicator";
-import { db } from "../../../config/FirebaseConfig";
-import { UserContext } from "../../../context/UserContext";
-import { collection, getDocs } from "firebase/firestore";
+} from "lucide-react-native"
+import CircularProgress from "react-native-circular-progress-indicator"
+import { db } from "../../../config/FirebaseConfig"
+import { UserContext } from "../../../context/UserContext"
+import { collection, getDocs } from "firebase/firestore"
 
 const Previous = () => {
-  const [loading, setLoading] = useState(true);
-  const { user } = useContext(UserContext);
-  const [tiles, setTiles] = useState([]);
+  const [loading, setLoading] = useState(true)
+  const { user } = useContext(UserContext)
+  const [tiles, setTiles] = useState([])
 
   // Fetch and filter previous trips for the current user
   const GetPrevTrips = async () => {
     try {
-      setLoading(true); // Ensure loading starts before fetch
-      const response = await getDocs(collection(db, "previous"));
-      const prevtrips = response.docs.map((doc) => ({
+      setLoading(true) // Ensure loading starts before fetch
+      const response = await getDocs(collection(db, "previous"))
+      const prevtrips = response.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-      }));
+      }))
 
       // Validate user data exists
-      if (!user?.id) throw new Error("Invalid user data");
+      if (!user?.id) throw new Error("Invalid user data")
 
       const actualPrevTrips = prevtrips.find(
-        (trip) => trip.user === String(user.id)
-      );
+        trip => trip.user === String(user.id)
+      )
 
       if (!actualPrevTrips || !actualPrevTrips.previous) {
-        setTiles([]);
-        Alert.alert("Info", "No trips found for the current user.");
+        setTiles([])
+        Alert.alert("Info", "No trips found for the current user.")
       } else {
-        setTiles(actualPrevTrips.previous); 
+        setTiles(actualPrevTrips.previous)
       }
     } catch (error) {
-      Alert.alert("Error", "Failed to fetch trips. Please try again.");
-      console.error(error);
+      Alert.alert("Error", "Failed to fetch trips. Please try again.")
+      console.error(error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    GetPrevTrips();
-  }, []);
+    GetPrevTrips()
+  }, [])
 
   // Transform object data for mapping
-  const transformData = (data) => {
+  const transformData = data => {
     return Object.entries(data).map(([key, value]) => ({
       label: key,
       value: value,
-    }));
-  };
+    }))
+  }
 
   // Extract transformed previous rides
-  const previousRides =
-    tiles.length > 0 ? transformData(tiles[0]) : []; // Ensure tiles exist
+  const previousRides = tiles.length > 0 ? transformData(tiles[0]) : [] // Ensure tiles exist
 
   // Icon mapping for labels
   const iconMapping = {
@@ -73,7 +72,24 @@ const Previous = () => {
     "total Earnings": <IndianRupee size={24} color="#28A745" />,
     "total Rides": <Truck size={24} color="#FF5733" />,
     "customer Satisfaction": <Star size={24} color="#FFC107" />,
-  };
+  }
+
+  const [active, setActive] = useState(0)
+
+  const months = [
+    "jan",
+    "feb",
+    "mar",
+    "apr",
+    "may",
+    "jun",
+    "jul",
+    "aug",
+    "sep",
+    "oct",
+    "nov",
+    "dec",
+  ]
 
   return (
     <View className="p-6">
@@ -81,6 +97,30 @@ const Previous = () => {
         Previous Rides Overview
       </Text>
 
+      <FlatList
+        showsHorizontalScrollIndicator={false}
+        className="mb-3"
+        data={months}
+        renderItem={({ item }) => (
+          <View
+            className={`bg-gray-200 rounded-full p-1 px-5 mb-4 ${
+              active === months.indexOf(item) ? "bg-primary-green" : ""
+            }`}
+          >
+            <Text
+              onPress={() => setActive(months.indexOf(item))}
+              className={`text-md font-semibold capitalize text-gray-500 ${
+                active === months.indexOf(item) ? "text-white" : ""
+              }`}
+            >
+              {item}
+            </Text>
+          </View>
+        )}
+        keyExtractor={item => item} // Ensure unique keys
+        contentContainerStyle={{ columnGap: 10 }}
+        horizontal
+      />
       {loading ? (
         <View className="animate-pulse">
           <View className="flex flex-wrap flex-row -mx-2 h-fit">
@@ -143,7 +183,7 @@ const Previous = () => {
         </View>
       )}
     </View>
-  );
-};
+  )
+}
 
-export default Previous;
+export default Previous
