@@ -26,7 +26,7 @@ const TabLayout = () => {
       />
 
       <Tabs.Screen
-        name="TripDetails"
+        name="UpcomingTrips"
         options={{
           headerShown: true,
           headerStyle: { backgroundColor: "#379972" },
