@@ -20,7 +20,14 @@ const TabLayout = () => {
       <Tabs.Screen
         name="Dashboard"
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: "#379972", // Set header background color
+            borderBottomWidth: 1, // Ensure the border is visible
+            borderBottomColor: "transparent", // Change this to the desired bottom border color
+          },
+          headerTintColor: "#FFFFFF",
+          headerTitle: "HireEVgo",
           tabBarIcon: ({ color }) => <NotebookTabs size={24} color={color} />,
         }}
       />
@@ -31,6 +38,7 @@ const TabLayout = () => {
           headerShown: true,
           headerStyle: { backgroundColor: "#379972" },
           headerTintColor: "#FFFFFF",
+          headerTitle: "Upcoming Trips",
           tabBarIcon: ({ color }) => <Calendar size={24} color={color} />,
         }}
       />
@@ -40,6 +48,7 @@ const TabLayout = () => {
           headerShown: true,
           headerStyle: { backgroundColor: "#379972" },
           headerTintColor: "#FFFFFF",
+          headerTitle: "Profile",
           tabBarIcon: ({ color }) => <User size={24} color={color} />,
         }}
       />

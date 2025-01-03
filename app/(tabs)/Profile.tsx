@@ -1,7 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
-import { View, Text, ScrollView, Image } from "react-native";
-import { UserContext } from "../../context/UserContext";
-import { User, Phone, Mail, Truck, BookUser, IdCard } from "lucide-react-native";
+import React, { useState, useEffect, useContext } from "react"
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Linking,
+  Alert,
+  TouchableOpacity,
+} from "react-native"
+import { UserContext } from "../../context/UserContext"
+import { User, Phone, Mail, Truck, BookUser, IdCard } from "lucide-react-native"
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
@@ -26,7 +34,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 5000); // Simulate API call delay
+    const timer = setTimeout(() => setLoading(false), 2000); // Simulate API call delay
     return () => clearTimeout(timer);
   }, []);
 
@@ -45,6 +53,21 @@ const Profile = () => {
     uri: uri,
   }));
 
+  const phoneNumber = "tel:18001234567"
+
+  const handlePress = async () => {
+    try {
+      const supported = await Linking.canOpenURL(phoneNumber)
+      if (supported) {
+        await Linking.openURL(phoneNumber) // Opens the dialer
+      } else {
+        Alert.alert("Error", "Your device doesn't support this feature.")
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed to open dialer.")
+    }
+  }
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -52,7 +75,7 @@ const Profile = () => {
       }}
       className="bg-background-primary w-full"
     >
-      <View className="p-6 pb-6 pt-24">
+      <View className="p-6 pb-6 pt-12">
         {/* Profile Information */}
         <View className="mb-6">
           <Text className="text-2xl mb-4 font-bold text-gray-900">
@@ -69,7 +92,7 @@ const Profile = () => {
               : personalDetails.map((detail, index) => (
                   <View className="flex-row items-center mb-3" key={index}>
                     {iconMapping[detail.label.toLowerCase()] || null}
-                    <Text className="text-gray-500 capitalize font-medium">
+                    <Text className="text-gray-500 ml-2 capitalize font-medium">
                       {detail.label}:
                     </Text>
                     <Text className="text-gray-900 font-semibold ml-auto">
@@ -95,7 +118,7 @@ const Profile = () => {
             : vehicleDetails.map((detail, index) => (
                 <View className="flex-row items-center mb-3" key={index}>
                   {iconMapping[detail.label.toLowerCase()] || null}
-                  <Text className="text-gray-500 capitalize font-medium">
+                  <Text className="text-gray-500 ml-2 capitalize font-medium">
                     {detail.label}:
                   </Text>
                   <Text className="text-gray-900 capitalize font-semibold ml-auto">
@@ -136,6 +159,19 @@ const Profile = () => {
                   />
                 </View>
               ))}
+        </View>
+        <View className="items-center border-t border-gray-300 w-full py-4">
+          <View className="flex-row items-center justify-center">
+            <Text className="text-gray-500 mr-2">Need help? Call</Text>
+            <TouchableOpacity onPress={handlePress}>
+              <Text className="text-primary-green font-semibold underline">
+                1800-123-4567
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <Text className="text-gray-500 mt-1">
+            &copy; 2024 HireEVgo. All rights reserved.
+          </Text>
         </View>
       </View>
     </ScrollView>

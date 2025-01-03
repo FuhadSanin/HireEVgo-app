@@ -3,7 +3,7 @@ import { View, Text, Image } from "react-native"
 
 const Header = ({ user }) => {
   return (
-    <View className="w-full mb-6 bg-primary-green p-6 pb-12 pt-24  rounded-b-[50px]">
+    <View className="w-full mb-6 bg-primary-green p-6 pb-12   rounded-b-[50px]">
       <View className="flex flex-row items-center justify-center gap-10 w-full">
         {/* Profile Image */}
         <Image

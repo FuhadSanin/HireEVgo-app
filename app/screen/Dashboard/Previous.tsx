@@ -116,7 +116,7 @@ const Previous = () => {
               </View>
             </View>
           ))}
-          <View className={`w-1/2 px-2 mb-6`}>
+          {/* <View className={`w-1/2 px-2 mb-6`}>
             <View
               className={`h-fit rounded-3xl flex flex-col justify-center items-center bg-white p-4 shadow-custom-light`}
             >
@@ -139,7 +139,7 @@ const Previous = () => {
                 activeStrokeWidth={10}
               />
             </View>
-          </View>
+          </View> */}
         </View>
       )}
     </View>
